@@ -1,23 +1,20 @@
 package ds.agh.chatapp.user;
 
-import ds.agh.chatapp.common.model.Message;
-import ds.agh.chatapp.user.connection.TCPManager;
-import ds.agh.chatapp.user.connection.UDPManager;
-import ds.agh.chatapp.utils.Logger;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import java.io.IOException;
-import java.net.InetAddress;
-
 public class User {
-    private String username;
+    private final String username;
+    private final boolean inMulticastGroup;
 
-    public User(String username) {
+    public User(String username, boolean inMulticastGroup) {
         this.username = username;
+        this.inMulticastGroup = inMulticastGroup;
+        System.out.println("User created: " + username + ", inMulticastGroup: " + inMulticastGroup);
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public boolean isInMulticastGroup() {
+        return inMulticastGroup;
     }
 }

@@ -1,7 +1,6 @@
 package ds.agh.chatapp.common;
 
 import ds.agh.chatapp.common.model.Message;
-import ds.agh.chatapp.utils.Logger;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -18,20 +17,18 @@ public class MessageUtils {
 
             return MessageSerializer.deserializeMessage(message);
         } catch (ClassNotFoundException e) {
-            Logger.logError("Deserialization failed, no class found: " + e.getMessage());
-            e.printStackTrace();
             return null;
         }
     }
 
     public static void sendUDPMessage(Message message, InetAddress address, int port) throws IOException {
-        DatagramSocket udpSocket = new DatagramSocket();
-        byte[] serializedMessage = MessageSerializer.serializeMessage(message);
-        if (serializedMessage.length > 1024) {
-            Logger.logError("Message is too large to send via UDP: " + message);
-            return;
+        try (DatagramSocket udpSocket = new DatagramSocket()) {
+            byte[] serializedMessage = MessageSerializer.serializeMessage(message);
+            if (serializedMessage.length > 1024) {
+                return;
+            }
+            DatagramPacket packet = new DatagramPacket(serializedMessage, serializedMessage.length, address, port);
+            udpSocket.send(packet);
         }
-        DatagramPacket packet = new DatagramPacket(serializedMessage, serializedMessage.length, address, port);
-        udpSocket.send(packet);
     }
 }

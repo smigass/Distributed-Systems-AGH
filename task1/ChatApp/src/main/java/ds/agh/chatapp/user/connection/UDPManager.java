@@ -4,28 +4,26 @@ import ds.agh.chatapp.common.MessageSerializer;
 import ds.agh.chatapp.common.MessageUtils;
 import ds.agh.chatapp.common.model.Color;
 import ds.agh.chatapp.common.model.Message;
-import ds.agh.chatapp.user.User;
-import ds.agh.chatapp.utils.Logger;
 import javafx.collections.ObservableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.imageio.IIOException;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.time.LocalTime;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class UDPManager implements MessageManager{
-    private DatagramSocket socket;
+    private final Logger logger = LoggerFactory.getLogger(UDPManager.class);
+    private final DatagramSocket socket;
     private final InetAddress serverAddress;
     private final int serverPort;
-    private byte[] receiveBuffer = new byte[4096];
-    private Thread listenerThread;
+    private final Thread listenerThread;
     private ObservableList<Message> messages;
 
-    public UDPManager(InetAddress serverAddress, int serverPort, int localPort) throws IOException {
+    public UDPManager(InetAddress serverAddress, int serverPort, int localPort, ObservableList<Message> messages) throws IOException {
+        this.messages = messages;
         this.serverPort = serverPort;
         this.serverAddress = serverAddress;
         socket = new DatagramSocket(localPort);
@@ -39,7 +37,7 @@ public class UDPManager implements MessageManager{
             messageObject.setTimestamp(LocalTime.now());
             MessageUtils.sendUDPMessage(messageObject, serverAddress, serverPort);
         } catch (IOException e) {
-            Logger.log("Failed to send UDP message: " + e.getMessage());
+            logger.info("Failed to send UDP message: {}", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -50,7 +48,7 @@ public class UDPManager implements MessageManager{
             messageObject.setTimestamp(LocalTime.now());
             MessageUtils.sendUDPMessage(messageObject, InetAddress.getByName(group), 54321);
         } catch (IOException e) {
-            Logger.log("Failed to send multicast message: " + e.getMessage());
+            logger.error("Failed to send multicast message: {}", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -59,15 +57,16 @@ public class UDPManager implements MessageManager{
     public void listenForMessages() {
         while (!listenerThread.isInterrupted()) {
             try {
-                Logger.log("Waiting for UDP messages on port " + socket.getLocalPort() + "...");
-                receiveBuffer = new byte[1024];
+                logger.info("Waiting for UDP messages on port {}...", socket.getLocalPort());
+                byte[] receiveBuffer = new byte[1024];
                 DatagramPacket packet = new DatagramPacket(receiveBuffer, receiveBuffer.length);
                 socket.receive(packet);
                 Message deserializedMessage = MessageSerializer.deserializeMessage(packet.getData());
+                logger.info("Received UDP message: {} from {}:{}", deserializedMessage, packet.getAddress(), packet.getPort());
                 deserializedMessage.setColor(Color.CYAN);
                 messages.add(deserializedMessage);
             } catch (Exception e) {
-                Logger.logError("Error while receiving UDP message: " + e.getMessage());
+                logger.error("Error while receiving UDP message: {}", e.getMessage());
                 e.printStackTrace();
             }
         }

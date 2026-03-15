@@ -4,39 +4,45 @@ import ds.agh.chatapp.common.MulticastManager;
 import ds.agh.chatapp.common.model.ConnectionProtocol;
 import ds.agh.chatapp.common.model.Message;
 import ds.agh.chatapp.user.User;
-import ds.agh.chatapp.utils.Logger;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetAddress;
 
 public class ConnectionService {
+    private final Logger logger = LoggerFactory.getLogger(ConnectionService.class);
     private final SimpleObjectProperty<ConnectionProtocol> selectedProtocol;
     private TCPManager tcpManager;
     private UDPManager udpManager;
     private MulticastManager multicastManager;
     private ObservableList<Message> messages;
+    private final boolean multicastMembership;
 
     private Thread multicastThread;
 
-    public ConnectionService(SimpleObjectProperty<ConnectionProtocol> sp) {
+    public ConnectionService(SimpleObjectProperty<ConnectionProtocol> sp, boolean multicastMembership) {
+        this.multicastMembership = multicastMembership;
         this.selectedProtocol = sp;
     }
 
     public void connectToServer(InetAddress serverAddress, int serverPort, User user) throws IOException {
-        this.tcpManager = new TCPManager(serverAddress, serverPort, user);
-        if (tcpManager.getSocket() == null || !tcpManager.getSocket().isConnected()) {
-            Logger.logError("TCP connection failed. Cannot initialize UDP connection.");
+        this.tcpManager = new TCPManager(serverAddress, serverPort, messages);
+        if (!tcpManager.getSocket().isConnected()) {
+            logger.error("TCP connection failed. Cannot initialize UDP connection.");
             return;
         }
-        this.udpManager = new UDPManager(serverAddress, serverPort, tcpManager.getSocket().getLocalPort());
+        this.udpManager = new UDPManager(serverAddress, serverPort, tcpManager.getSocket().getLocalPort(), messages);
         this.tcpManager.setMessages(messages);
         this.udpManager.setMessages(messages);
         this.tcpManager.sendMessage("INIT", user.getUsername());
-        this.multicastManager = new MulticastManager("239.0.0.0", messages);
-        this.multicastThread = Thread.startVirtualThread(multicastManager);
+        if (multicastMembership) {
+            logger.info("User is in multicast group, initializing MulticastManager...");
+            this.multicastManager = new MulticastManager("239.0.0.0", messages);
+            this.multicastThread = Thread.startVirtualThread(multicastManager);
+        }
     }
 
     public void sendMessage(String message, String username) {
@@ -53,6 +59,7 @@ public class ConnectionService {
             }
             case "/m" -> {
                 udpManager.sendMulticastMessage(content, username, "239.0.0.0");
+                return;
             }
         }
         switch (selectedProtocol.get()) {

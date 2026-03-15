@@ -10,18 +10,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.time.LocalTime;
 import java.util.List;
 
 public class UserPresenter {
@@ -29,7 +22,7 @@ public class UserPresenter {
 
     private UserService userService;
 
-    private ObservableList<ConnectionProtocol> connectionProtocols = FXCollections.observableArrayList(ConnectionProtocol.values());
+    private final ObservableList<ConnectionProtocol> connectionProtocols = FXCollections.observableArrayList(ConnectionProtocol.values());
 
     @FXML
     private Button nameButton;
@@ -62,6 +55,9 @@ public class UserPresenter {
     private VBox protocolBox;
 
     @FXML
+    private CheckBox multicastCheck;
+
+    @FXML
     public void initialize() {
         initListeners();
     }
@@ -77,12 +73,16 @@ public class UserPresenter {
                 Logger.logError("Invalid port number in server address: " + splitAddress.get(1) + ". Using default port " + port);
             }
         }
-        user = new User(username);
+        user = new User(username, multicastCheck.selectedProperty().get());
         userName.setText("Logged in as: " + username);
         userName.setStyle("-fx-fill: #b99d9d;");
         userService = new UserService(user);
-        userService.connectToServer(serverAddress, port);
+        if (userService.connectToServer(serverAddress, port) == 1) {
+            userName.setText("Failed to connect.");
+            return;
+        }
         nameBox.setVisible(false);
+
         userService.getMessages().addListener(((ListChangeListener<Message>)change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
@@ -97,7 +97,7 @@ public class UserPresenter {
         ProtocolChoiceBox protocolChoiceBox = new ProtocolChoiceBox();
         protocolBox.getChildren().add(protocolChoiceBox);
 
-        protocolChoiceBox.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {;
+        protocolChoiceBox.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
             ConnectionProtocol selectedProtocol = connectionProtocols.get(newVal.intValue());
             userService.setSelectedProtocol(selectedProtocol);
         });
@@ -105,9 +105,7 @@ public class UserPresenter {
 
 
     private void initListeners() {
-        leaveButton.setOnAction(e -> {
-            shutdown();
-        });
+        leaveButton.setOnAction(e -> shutdown());
 
         nameButton.setOnAction(e -> {
             String username = nameText.getText();

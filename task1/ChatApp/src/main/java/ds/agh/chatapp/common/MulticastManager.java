@@ -1,5 +1,6 @@
 package ds.agh.chatapp.common;
 
+import ds.agh.chatapp.common.model.Color;
 import ds.agh.chatapp.common.model.Message;
 import ds.agh.chatapp.utils.Logger;
 import javafx.collections.ObservableList;
@@ -11,7 +12,7 @@ import java.net.MulticastSocket;
 
 public class MulticastManager implements Runnable{
     private MulticastSocket socket;
-    private ObservableList<Message> messages;
+    private final ObservableList<Message> messages;
 
     public MulticastManager(String group, ObservableList<Message> messages) {
         this.messages = messages;
@@ -38,6 +39,7 @@ public class MulticastManager implements Runnable{
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
                 Message message = MessageSerializer.deserializeMessage(packet.getData());
+                message.setColor(Color.MAGENTA);
                 messages.add(message);
             } catch (IOException | ClassNotFoundException e) {
                 Logger.log("Error while receiving multicast message: " + e.getMessage());

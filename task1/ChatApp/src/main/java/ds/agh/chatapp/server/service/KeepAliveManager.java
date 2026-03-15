@@ -1,10 +1,8 @@
 package ds.agh.chatapp.server.service;
 
-import ds.agh.chatapp.common.MessageUtils;
 import ds.agh.chatapp.common.model.Message;
 import ds.agh.chatapp.server.Connection;
 import ds.agh.chatapp.utils.Logger;
-import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.time.LocalTime;
@@ -16,7 +14,7 @@ public class KeepAliveManager implements Runnable{
     private final List<Connection> connections;
     private final ExecutorService executor = Executors.newFixedThreadPool(5);
 
-    public KeepAliveManager(List<Connection> connections, ObservableList<String> connectedClients) {
+    public KeepAliveManager(List<Connection> connections) {
         this.connections = connections;
     }
 
@@ -25,11 +23,9 @@ public class KeepAliveManager implements Runnable{
         while (true) {
             try {
                 for (Connection connection : connections) {
-                    executor.submit(() -> {
-                        sendKeepAlive(connection);
-                    });
+                    executor.submit(() -> sendKeepAlive(connection));
                 }
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;

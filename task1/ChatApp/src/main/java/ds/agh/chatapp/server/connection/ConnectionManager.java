@@ -7,22 +7,23 @@ import ds.agh.chatapp.common.model.Message;
 import ds.agh.chatapp.server.Connection;
 import ds.agh.chatapp.server.service.KeepAliveManager;
 import ds.agh.chatapp.server.service.MessagePopulator;
-import ds.agh.chatapp.utils.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.List;
 
-public class ConnectionManager implements Runnable {
+public class ConnectionManager {
+    private final Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
     private final int port;
     private ServerSocket tcpServerSocket;
     private DatagramSocket udpServerSocket;
     private MessagePopulator messagePopulator;
     private final ObservableList<Message> messageBuffer = FXCollections.observableArrayList();
-    private ObservableList<String> connectedClients;
     private KeepAliveManager keepAliveManager;
     private List<Connection> connections;
     private MulticastManager multicastManager;
@@ -36,20 +37,24 @@ public class ConnectionManager implements Runnable {
         this.port = port;
     }
 
-    @Override
-    public void run() {
+    public void init(boolean isMulticastEnabled) {
         try {
             initializeSockets();
             initializeMessageBufferListener();
-            tcpListenerThread = Thread.startVirtualThread(this::listenForTCPConnections);
-            udpListenerThread = Thread.startVirtualThread(this::listenForUDPMessages);
-            keepAliveThread = Thread.startVirtualThread(keepAliveManager);
-            multicastManager = new MulticastManager("239.0.0.0", messageBuffer);
-            multicastThread = Thread.startVirtualThread(multicastManager);
-
+            tcpListenerThread = new Thread(this::listenForTCPConnections);
+            udpListenerThread = new Thread(this::listenForUDPMessages);
+            keepAliveThread = new Thread(keepAliveManager);
+            if (isMulticastEnabled) {
+                multicastManager = new MulticastManager("239.0.0.0", messageBuffer);
+            }
+            multicastThread = new Thread(multicastManager);
+            tcpListenerThread.start();
+            udpListenerThread.start();
+            keepAliveThread.start();
+            multicastThread.start();
         } catch (IOException e) {
-            Logger.logError("Failed to start ConnectionManager: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Failed to start ConnectionManager: " + e.getMessage());
+            this.stop();
         }
     }
 
@@ -62,28 +67,26 @@ public class ConnectionManager implements Runnable {
                 Message deserializedMessage = MessageSerializer.deserializeMessage(packet.getData());
                 messagePopulator.populateMessage(deserializedMessage, ConnectionProtocol.UDP);
             } catch (IOException e) {
-                Logger.logError("Error while receiving UDP message: " + e.getMessage(), true);
+                logger.error("Error while receiving UDP message: {}", e.getMessage());
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
                 break;
             } catch (ClassNotFoundException e) {
-                Logger.logError("Deserialization failed, no class found: " + e.getMessage(), true);
+                logger.error("Deserialization failed, no class found: {}", e.getMessage());
+                e.printStackTrace();
             }
         }
     }
 
     private void listenForTCPConnections(){
         try {
-            Logger.log("Waiting for TCP connections on port " + port + "...", true);
             while (!tcpServerSocket.isClosed())  {
                 Socket clientSocket = tcpServerSocket.accept();
                 Connection connection = new Connection(clientSocket, messageBuffer);
-                connection.setConnectedClients(connectedClients);
                 connections.add(connection);
-                Logger.log("New TCP connection from " + clientSocket.getInetAddress() + ":" + clientSocket.getPort(), true);
             }
         } catch (IOException e) {
-            Logger.logError("Error while accepting TCP connection: " + e.getMessage(), true);
+            logger.error("Error while accepting TCP connection: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -105,32 +108,34 @@ public class ConnectionManager implements Runnable {
         });
     }
 
-    public void stop() throws IOException {
-        if (tcpServerSocket != null && !tcpServerSocket.isClosed()) {
-            tcpServerSocket.close();
+    public void stop(){
+        try {
+            if (tcpServerSocket != null && !tcpServerSocket.isClosed()) {
+                tcpServerSocket.close();
+            }
+            if (udpServerSocket != null && !udpServerSocket.isClosed()) {
+                udpServerSocket.close();
+            }
+            if (tcpListenerThread != null) {
+                tcpListenerThread.interrupt();
+            }
+            if (udpListenerThread != null) {
+                udpListenerThread.interrupt();
+            }
+            if (keepAliveThread != null) {
+                keepAliveThread.interrupt();
+            }
+            if (multicastThread != null) {
+                multicastThread.interrupt();
+            }
+            for (Connection connection : connections) {
+                connection.shutdown();
+            }
+        } catch (IOException e) {
+            logger.error("Error while stopping ConnectionManager: {}", e.getMessage());
+            e.printStackTrace();
         }
-        if (udpServerSocket != null && !udpServerSocket.isClosed()) {
-            udpServerSocket.close();
-        }
-        if (tcpListenerThread != null) {
-            tcpListenerThread.interrupt();
-        }
-        if (udpListenerThread != null) {
-            udpListenerThread.interrupt();
-        }
-        if (keepAliveThread != null) {
-            keepAliveThread.interrupt();
-        }
-        if (multicastThread != null) {
-            multicastThread.interrupt();
-        }
-        for (Connection connection : connections) {
-            connection.shutdown();
-        }
-    }
 
-    public void setConnectedClients(ObservableList<String> connectedClients) {
-        this.connectedClients = connectedClients;
     }
 
     public void setConnections(List<Connection> connections) {

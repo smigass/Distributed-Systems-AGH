@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.List;
 import java.util.Objects;
 
 public class UserView extends Application {
@@ -24,7 +23,7 @@ public class UserView extends Application {
         stage.setTitle("Chat App - User");
         stage.show();
 
-        stage.setOnCloseRequest(event -> {
+        stage.setOnCloseRequest(_ -> {
             Logger.log("Shutting down user session...");
             presenter.shutdown();
         });
