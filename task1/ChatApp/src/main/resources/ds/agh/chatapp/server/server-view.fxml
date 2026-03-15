@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="427.0" prefWidth="655.0" style="-fx-background-color: #424242;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ds.agh.chatapp.server.ServerPresenter">
+    <SplitPane dividerPositions="0.29632465543644715" prefHeight="370.0" prefWidth="655.0" style="-fx-background-color: #424242;" VBox.vgrow="ALWAYS">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <VBox alignment="TOP_CENTER" layoutX="46.0" layoutY="91.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" text="CONNECTED USERS" textAlignment="CENTER" textFill="WHITE" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font name="JetBrains Mono Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Pane maxHeight="0.0" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" />
+                  <VBox fx:id="connectedUsersContainer" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="User1" textFill="WHITE">
+                           <font>
+                              <Font name="JetBrains Mono Regular" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </VBox>
+         </children></AnchorPane>
+      <AnchorPane fx:id="messagePane" minHeight="0.0" minWidth="0.0" prefHeight="367.0" prefWidth="435.0">
+         <children>
+            <VBox layoutX="-3.0" layoutY="-2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <children>
+                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: #424242; -fx-border-color: #424242;" vbarPolicy="ALWAYS">
+                     <content>
+                        <AnchorPane maxWidth="1.7976931348623157E308" style="-fx-background-color: #424242;">
+                           <children>
+                              <VBox fx:id="logsContainer" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+    </SplitPane>
+   <Pane maxHeight="0.0" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" />
+    <HBox alignment="CENTER" prefHeight="57.0" prefWidth="696.0">
+      <children>
+         <Button fx:id="stateButton" mnemonicParsing="false" prefHeight="28.0" prefWidth="146.0" style="-fx-background-color: #00d142;" textFill="#615d5d">
+            <font>
+               <Font name="JetBrains Mono Bold" size="16.0" />
+            </font>
+            <HBox.margin>
+               <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+            </HBox.margin>
+         </Button>
+         <Button fx:id="joinButton" mnemonicParsing="false" prefHeight="28.0" prefWidth="146.0" style="-fx-background-color: #fffc41;" text="Join Chat" textFill="#615d5d">
+            <font>
+               <Font name="JetBrains Mono Bold" size="16.0" />
+            </font>
+            <HBox.margin>
+               <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+            </HBox.margin>
+         </Button>
+      </children>
+    </HBox>
+</VBox>

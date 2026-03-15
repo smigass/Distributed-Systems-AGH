@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #424242;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ds.agh.chatapp.user.UserPresenter">
+    <SplitPane prefHeight="370.0" prefWidth="655.0" style="-fx-background-color: #424242;" VBox.vgrow="ALWAYS">
+        <AnchorPane fx:id="messagePane" minHeight="0.0" minWidth="0.0" prefHeight="166.0" prefWidth="455.0">
+               <Label fx:id="userName" alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" text="CONNECT TO SERVER" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                   <font>
+                       <Font name="JetBrains Mono Bold" size="18.0" />
+                   </font>
+               </Label>
+            <VBox layoutX="-3.0" layoutY="-2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </padding>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: #424242; -fx-border-color: #424242;" VBox.vgrow="ALWAYS">
+              <content>
+                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #424242;">
+                     <children>
+                        <VBox fx:id="messageBoxContainer" maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0">
+               <children>
+                  <TextArea fx:id="messageBox" minHeight="0.0" minWidth="0.0" prefHeight="20.0" prefWidth="793.0" promptText="type a message or command '/'" wrapText="true">
+                     <font>
+                        <Font name="JetBrains Mono Regular" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </TextArea>
+                  <VBox fx:id="protocolBox" alignment="CENTER" prefHeight="87.0" prefWidth="100.0">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+                  <Button fx:id="sendButton" mnemonicParsing="false" prefHeight="45.0" prefWidth="116.0" style="-fx-background-color: #00a8aa;" text="Send" textFill="WHITE">
+                     <font>
+                        <Font name="JetBrains Mono Bold" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            </VBox>
+        </AnchorPane>
+    </SplitPane>
+    <Pane maxHeight="0.0" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" />
+   <VBox alignment="CENTER" prefHeight="113.0" prefWidth="655.0">
+      <children>
+          <HBox fx:id="nameBox" alignment="CENTER" prefHeight="104.0" prefWidth="655.0" spacing="10.0" VBox.vgrow="ALWAYS">
+              <children>
+               <VBox alignment="CENTER_LEFT" HBox.hgrow="SOMETIMES">
+                  <children>
+                     <HBox alignment="CENTER">
+                        <children>
+                           <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                              <children>
+                                 <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Your username:">
+                                    <font>
+                                       <Font name="JetBrains Mono Regular" size="12.0" />
+                                    </font>
+                                 </Text>
+                                 <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Server IP:">
+                                    <font>
+                                       <Font name="JetBrains Mono Regular" size="12.0" />
+                                    </font>
+                                 </Text>
+                              </children>
+                              <HBox.margin>
+                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              </HBox.margin>
+                           </VBox>
+                           <VBox alignment="CENTER" prefHeight="64.0" prefWidth="194.0">
+                              <children>
+                                 <TextField fx:id="nameText" prefHeight="26.0" prefWidth="181.0" text="user1">
+                                    <VBox.margin>
+                                       <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                                    </VBox.margin>
+                                 </TextField>
+                                 <TextField fx:id="ServerIP" prefHeight="21.0" prefWidth="160.0" text="localhost">
+                                    <VBox.margin>
+                                       <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                                    </VBox.margin>
+                                 </TextField>
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                  </children>
+               </VBox>
+               <Button fx:id="nameButton" mnemonicParsing="false" prefHeight="7.0" prefWidth="100.0" style="-fx-background-color: #37d100;" text="Connect" textFill="#434343">
+                  <font>
+                     <Font name="JetBrains Mono Bold" size="14.0" />
+                  </font>
+                  <HBox.margin>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </HBox.margin>
+               </Button>
+                  <Button fx:id="leaveButton" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="110.0" style="-fx-background-color: #eb4b43;" text="Leave" textFill="#d3d3d3">
+                      <font>
+                          <Font name="JetBrains Mono Bold" size="14.0" />
+                      </font>
+                  <HBox.margin>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </HBox.margin>
+                  </Button>
+              </children>
+            <VBox.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </VBox.margin>
+          </HBox>
+      </children>
+   </VBox>
+</VBox>

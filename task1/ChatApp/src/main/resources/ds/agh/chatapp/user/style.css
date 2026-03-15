@@ -1,0 +1,16 @@
+.scroll-pane .viewport{
+    -fx-background-color:  #424242;
+}
+
+.choice-box {
+    -fx-background-color: #dfdfdf;
+    -fx-font-family: "JetBrains Mono";
+    -fx-padding: 3px;
+    -fx-pref-height: 45px;
+    -fx-pref-width: 150px;
+}
+
+.text-area .scroll-pane {
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: as-needed;
+}
