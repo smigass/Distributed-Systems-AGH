@@ -1,0 +1,12 @@
+services:
+  ice-server:
+    build: .
+    ports:
+      - "10000:10000"
+    command:
+       java -cp "target/classes/:target/lib/*" sr.ice.server.IceServer --Ice.Config=server.config
+
+  ice-client:
+    build: .
+    command:
+       java -cp "target/classes/:target/lib/*"  sr.ice.client.IceClient --Ice.Config=client.config
