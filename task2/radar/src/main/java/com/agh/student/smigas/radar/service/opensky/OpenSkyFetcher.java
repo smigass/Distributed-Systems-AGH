@@ -26,7 +26,7 @@ public class OpenSkyFetcher {
         this.mapper = mapper;
     }
 
-    @Scheduled(fixedRate = 600000)
+    @Scheduled(fixedRate = 5000)
     public void fetchAndStoreStats() {
         log.info("Fetching flight states from OpenSky API...");
 

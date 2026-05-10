@@ -1,0 +1,198 @@
+* {
+    transition: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    background-color: #f6f6f6;
+    margin: 0 120px;
+}
+
+#map {
+     height: 600px;
+     width: 800px;
+     margin-top: 20px;
+}
+
+#map-container {
+    justify-content: center;
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#main-div {
+    display: flex;
+    background: var(--primary-bg);
+    padding: 20px 40px;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+main {
+    width: 100%;
+}
+
+#form-div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-left: 50px;
+}
+
+.list{
+    width: 80%;
+    margin: 10px;
+}
+
+input {
+    width: 300px;
+    height: 30px;
+    margin: 10px 0;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+.leaflet-marker-icon{
+  transform-origin: center !important;
+}
+
+h1 {
+    font-weight: 800;
+}
+
+h2 {
+    font-weight: 600;
+}
+
+input[type=submit] {
+    width: 100px;
+}
+
+.form {
+    background: #fcfcfc;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+
+
+
+
+
+:root {
+    --primary-bg: #ffffff;
+    --border-color: #e0e6ed;
+    --text-main: #2d3748;
+    --text-muted: #718096;
+    --accent-color: #3182ce;
+    --status-green: #48bb78;
+}
+
+.flight-card {
+    background: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 10px 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.find-flight {
+    background: #f0ffff;
+    color: #3388ff;
+    cursor: pointer;
+}
+
+.card-header-right {
+    display: flex;
+    justify-content: space-between;
+}
+
+.airline-name {
+    font-weight: bold;
+    color: var(--accent-color);
+    margin-right: 8px;
+}
+
+.flight-number {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.badge {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-departed {
+    background: #f0fff4;
+    color: var(--status-green);
+}
+
+.card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.airport {
+    display: flex;
+    flex-direction: column;
+}
+
+.iata {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1;
+}
+
+.icao, .city {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+
+.line {
+    height: 2px;
+    background: var(--border-color);
+    width: 100%;
+    position: absolute;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--border-color);
+    padding-top: 12px;
+    font-size: 13px;
+}
+
+.time-label { color: var(--text-muted); }
+.aircraft-info { color: var(--text-muted); align-self: flex-end;}
+.text-right { text-align: right; }
+
