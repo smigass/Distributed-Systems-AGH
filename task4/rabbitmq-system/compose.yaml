@@ -1,0 +1,78 @@
+services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  agency1:
+    build: .
+    environment:
+      SPRING_PROFILES_ACTIVE: agency
+      AGENCY_NAME: AgencyA
+      AGENCY_ID: 1
+      RABBITMQ_HOST: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  agency2:
+    build: .
+    environment:
+      SPRING_PROFILES_ACTIVE: agency
+      AGENCY_NAME: AgencyB
+      AGENCY_ID: 2
+      RABBITMQ_HOST: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  carrier1:
+    build: .
+    environment:
+      SPRING_PROFILES_ACTIVE: carrier
+      CARRIER_NAME: CarrierA
+      CARRIER_ID: 1
+      RABBITMQ_HOST: rabbitmq
+      CARRIER_PEOPLE: true
+      CARRIER_CARGO: true
+      CARRIER_SATELLITE: false
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  carrier2:
+    build: .
+    environment:
+      SPRING_PROFILES_ACTIVE: carrier
+      CARRIER_NAME: CarrierB
+      CARRIER_ID: 2
+      CARRIER_PEOPLE: false
+      CARRIER_CARGO: true
+      CARRIER_SATELLITE: true
+      RABBITMQ_HOST: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  admin:
+    build: .
+    environment:
+      SPRING_PROFILES_ACTIVE: admin
+      RABBITMQ_HOST: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    tty: true
+    stdin_open: true
+
+
