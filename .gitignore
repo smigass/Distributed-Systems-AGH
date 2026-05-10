@@ -14,3 +14,17 @@
 *.tar.gz
 *.rar
 .mvn/
+
+task2/.env
+
+*.venv
+
+/task3/smart-home/client/SmartHome/
+
+*__pycache__
+
+target/
+
+node_modules/
+
+.vscode/
