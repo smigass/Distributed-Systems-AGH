@@ -1,0 +1,39 @@
+<icegrid>
+    <application name="SmartBuilding">
+        <node name="Node">
+            <server id="ServerFloor1" exe="java" activation="always" pwd="./server">
+                <option>-jar</option> 
+                <option>build/libs/server-1.0-SNAPSHOT-all.jar</option>
+                <property name="App.Floor" value="1"/>
+                <adapter name="Floor1Adapter" id="Floor1Adapter" endpoints="tcp -h 127.0.0.1">
+                    <object identity="light/living_room" type="::SmartHome::RgbDiscoLight"/>
+                    <object identity="light/kitchen" type="::SmartHome::NormalLight"/>
+                    <object identity="light/bedroom" type="::SmartHome::NormalLight"/>
+                    <object identity="tv/living_room" type="::SmartHome::TV"/>
+                </adapter>
+            </server>
+
+            <server id="ServerFloor2" exe="java" activation="always" pwd="./server">
+                <option>-jar</option> 
+                <option>build/libs/server-1.0-SNAPSHOT-all.jar</option>
+                <property name="App.Floor" value="2"/>
+                <adapter name="Floor2Adapter" id="Floor2Adapter" endpoints="tcp -h 127.0.0.1">
+                    <object identity="sensor/station_west" type="::SmartHome::WeatherStation"/>
+                    <object identity="light/small_room_desk" type="::SmartHome::DeskLamp"/>
+                    <object identity="light/small_room" type="::SmartHome::NormalLight"/>
+                </adapter>
+            </server>
+
+            <server id="ServerFloor3" exe="java" activation="always" pwd="./server">
+                <option>-jar</option> 
+                <option>build/libs/server-1.0-SNAPSHOT-all.jar</option>
+                <property name="App.Floor" value="3"/>
+                <adapter name="Floor3Adapter" id="Floor3Adapter" endpoints="tcp -h 127.0.0.1">
+                    <object identity="sensor/station_east" type="::SmartHome::WeatherStation"/>
+                    <object identity="light/office" type="::SmartHome::NormalLight"/>
+                    <object identity="light/office_desk" type="::SmartHome::DeskLamp"/>
+                </adapter>
+            </server> 
+        </node> 
+    </application>
+</icegrid>

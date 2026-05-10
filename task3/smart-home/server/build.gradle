@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'com.zeroc.slice-tools' version '3.8.1'
+    id 'com.gradleup.shadow' version '8.3.5'
+}
+
+group = 'ds.smarthome'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'ds.smarthome.Server'
+    }
+    archiveClassifier.set('all')
+    mergeServiceFiles()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:6.0.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'com.zeroc:ice:3.8.0'
+}
+
+sourceSets {
+    main {
+        slice {
+            srcDir "../slice"
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

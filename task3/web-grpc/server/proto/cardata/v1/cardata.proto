@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package cardata.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+enum EngineMode {
+  ENGINE_MODE_SLOW_IN = 0;
+  ENGINE_MODE_RACE = 1;
+  ENGINE_MODE_QUALIFY = 2;
+  ENGINE_MODE_ATTACK = 3;
+}
+
+message StreamTelemetryResponse {
+  int32 rpm = 1;
+  double speed = 2;
+  EngineMode current_mode = 3;
+  map<string, float> tire_temps = 4;
+  google.protobuf.Timestamp time = 5;
+}
+
+message ChangeEngineModeRequest {
+  EngineMode requested_mode = 1;
+}
+
+message ChangeEngineModeResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+service F1TelemetryService {
+  rpc StreamTelemetry(google.protobuf.Empty) returns (stream StreamTelemetryResponse);  
+  rpc ChangeEngineMode(ChangeEngineModeRequest) returns (ChangeEngineModeResponse);
+}

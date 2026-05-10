@@ -1,0 +1,12 @@
+# Configuration file (05/08/26 10:54:07.884)
+
+# Server configuration
+Ice.Admin.ServerId=ServerFloor3
+Ice.Admin.Endpoints=tcp -h 127.0.0.1
+Ice.ProgramName=ServerFloor3
+# Object adapter Floor3Adapter
+Floor3Adapter.Endpoints=tcp -h 127.0.0.1
+Floor3Adapter.AdapterId=Floor3Adapter
+# Server descriptor properties
+App.Floor=3
+Ice.Default.Locator=IceGrid/Locator:tcp -h localhost -p 4061

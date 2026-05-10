@@ -1,0 +1,11 @@
+[project]
+name = "client"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "colorama>=0.4.6",
+    "inquirer>=3.4.1",
+    "inquirerpy>=0.3.4",
+    "zeroc-ice>=3.8.1",
+]
