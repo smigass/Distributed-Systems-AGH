@@ -1,0 +1,9 @@
+[versions]
+junit-jupiter = "6.0.1"
+zookeeper = "3.8.4"
+slf4j = "2.0.17"
+
+[libraries]
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+zookeeper = { module = "org.apache.zookeeper:zookeeper", version.ref = "zookeeper" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
